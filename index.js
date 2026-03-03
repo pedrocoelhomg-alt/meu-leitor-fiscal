@@ -1,4 +1,3 @@
-javascript
 // Instale com: npm install puppeteer express cors
 const puppeteer = require('puppeteer');
 const express = require('express');
