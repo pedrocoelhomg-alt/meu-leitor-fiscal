@@ -6,7 +6,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.get("/", (req, res) => {
+  res.status(200).send("OK - meu-leitor-fiscal online");
+});
 
+app.get("/health", (req, res) => {
+  res.json({ ok: true });
+});
 app.post('/extrair', async (req, res) => {
   const { url } = req.body;
 
