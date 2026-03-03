@@ -24,24 +24,25 @@ app.post('/extrair', async (req, res) => {
     try {
         await page.goto(url, { waitUntil: 'networkidle2' });
 
-        const dados = await page.evaluate(() => {
-            // Seletores específicos para o layout da NFC-e do RJ
-            const produtos = [];
-            const linhas = document.querySelectorAll('table#tabResult tr');
+       const dados = await page.evaluate(() => {
+    const produtos = [];
+    // Busca os itens em tabelas ou listas (padrão 2026)
+    const linhas = document.querySelectorAll('table#tabResult tr, .item-list tr, .container-itens tr');
 
-            linhas.forEach(linha => {
-                const nome = linha.querySelector('.txtTit')?.innerText.trim();
-                const preco = linha.querySelector('.valor')?.innerText.trim();
-                if (nome) produtos.push({ nome, preco });
-            });
+    linhas.forEach(linha => {
+        const nome = linha.querySelector('.txtTit, .nome-produto, .description')?.innerText.trim();
+        const preco = linha.querySelector('.valor, .preco-unitario, .total-item')?.innerText.trim();
+        if (nome && preco) produtos.push({ nome, preco });
+    });
 
-            return {
-                fornecedor: document.querySelector('#u20')?.innerText.trim() || "Não encontrado",
-                total: document.querySelector('.totalNFe')?.innerText.trim() || "0,00",
-                pagamento: document.querySelector('.txtExtra')?.innerText.trim() || "Não informado",
-                itens: produtos
-            };
-        });
+    return {
+        // Seletores atualizados para o topo da nota do RJ
+        fornecedor: document.querySelector('#u20, .txtTopo, .razao-social')?.innerText.trim() || "Loja não identificada",
+        total: document.querySelector('.totalNFe, .v_total, #vTotal')?.innerText.trim() || "0,00",
+        pagamento: document.querySelector('.txtExtra, .forma-pagamento')?.innerText.trim() || "Não informado",
+        itens: produtos
+    };
+});
 
         res.json(dados);
     } catch (error) {
