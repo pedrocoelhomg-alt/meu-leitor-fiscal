@@ -1,13 +1,18 @@
 {
   "name": "meu-leitor-fiscal",
   "version": "1.0.0",
+  "description": "Servidor de extração de cupons fiscais via Puppeteer",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "postinstall": "node -e \"console.log('postinstall ok')\""
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "puppeteer": "21.4.1" 
+    "express": "4.18.2",
+    "cors": "2.8.5",
+    "puppeteer": "21.4.1"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
