@@ -10,7 +10,16 @@ app.use(express.json());
 
 app.post('/extrair', async (req, res) => {
     const { url } = req.body;
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({
+        executablePath: '/usr/bin/google-chrome-stable',
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--single-process',
+            '--no-zygote'
+        ],
+        headless: "new"
+    });
     const page = await browser.newPage();
 
     try {
